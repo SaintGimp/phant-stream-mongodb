@@ -97,11 +97,19 @@ app.clear = function(id) {
 
   this.db.connect().then(function(db) {
 
-    db.dropCollection(id, function(err, result) {
+    db.collection(id, {strict:true}, function(err, collection) {
 
       if(err) {
         self.emit('error', err);
+        return;
       }
+
+      collection.drop(function(err) {
+
+        if(err) {
+          self.emit('error', err);
+        }
+      });
 
     });
 
